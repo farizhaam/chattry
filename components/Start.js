@@ -15,7 +15,9 @@ export default class Start extends React.Component {
         return (
         <View style={styles.container}>
             <ImageBackground source={image} resizeMode='cover' style={styles.image}>
-                <Text style={styles.title}>Chattry</Text>
+                <View style={styles.titlebox}>
+                    <Text style={styles.title}>Chattry</Text>                
+                </View>
                 <View style={styles.box}>
                     <View style={styles.inputbox}>
                         <Image source={icon} style={styles.usericon}/>
@@ -56,6 +58,10 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    titlebox:{
+        height: "44%",
+        width: "88%"
     },
     title: {
         fontSize: 45,
