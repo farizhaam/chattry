@@ -102,32 +102,48 @@ const styles = StyleSheet.create({
     colorbox:{
         flexDirection: 'column',
         padding: 20,
-        marginRight: 'auto'
+        marginRight: 'auto',
+        width: "88%"
     },
     colortext:{
         fontSize: 16,
         fontWeight: "300",
         color: '#757083',
         opacity: 1,
+        padding: 5,
     },
     colorpalette: {
         flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 5,
     },
     color1:{
+        flexDirection: 'row',
         backgroundColor: '#090C08',
-        borderRadius: 10
+        width: 40,
+        height: 40,
+        borderRadius: 20,
     },
     color2:{
+        flexDirection: 'row',
         backgroundColor: '#474056',
-        borderRadius: 10
+        width: 40,
+        height: 40,
+        borderRadius: 20,
     },
     color3:{
+        flexDirection: 'row',
         backgroundColor: '#8A95A5',
-        borderRadius: 10
+        width: 40,
+        height: 40,
+        borderRadius: 20,
     },
     color4:{
+        flexDirection: 'row',
         backgroundColor: '#B9C6AE',
-        borderRadius: 250
+        width: 40,
+        height: 40,
+        borderRadius: 20,
     },
     button: {
         flexDirection: 'column',
