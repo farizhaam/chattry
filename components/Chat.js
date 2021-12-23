@@ -11,6 +11,18 @@ export default class Chat extends React.Component {
         }
     }
 
+    renderBubble(props) {
+        return (
+            <Bubble
+                {...props}
+                wrapperStyle={{
+                    right: {
+                        backgroundColor: '#000'
+                    }
+                }}
+            />
+        )
+    }
     componentDidMount() {
         this.setState({
             messages: [
