@@ -1,15 +1,43 @@
-import React, {Component} from 'react';
-import { ImageBackground, Image, StyleSheet, View, Text, TextInput, Pressable} from 'react-native';
+import React, {useState} from 'react';
+import { 
+    ImageBackground, 
+    Image,
+    StyleSheet, 
+    TouchableOpacity,
+    View, 
+    Text, 
+    TextInput, 
+    Pressable
+} from 'react-native';
 
 const image = require('../assets/images/bg.png');
-const icon = require('../assets/username_icon.svg');
+const icon = require('../assets/username-icon.jpg');
+
 
 export default class Start extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { text: '' };
+        this.state = { 
+            name: '',
+            bgcolor: '',
+        };
     }
+
+
+    changeBgColor = (newColor) => {
+        this.setState({ bgColor: newColor });
+    };
+
+
+
+    //background color choices
+    colors = {
+        black: "#090C08",
+        independence: "#474056",
+        duskGray: "#8A95A5",
+        composedGreen: "#B9C6AE",
+    };
 
     render() {
         return (
@@ -19,25 +47,63 @@ export default class Start extends React.Component {
                     <Text style={styles.title}>Chattry</Text>                
                 </View>
                 <View style={styles.box}>
-                    <View style={styles.inputbox}>
-                        <Image source={icon} style={styles.usericon}/>
+                    <View style={styles.inputBox}>
+                        <Image source={icon} style={styles.userIcon}/>
                         <TextInput
                             style={styles.input}
                             onChangeText={(text) => this.setState({text})}
-                            value={this.state.text}
+                            value={this.state.name}
                             placeholder='Your Name'
                         ></TextInput>
                     </View>
-                    <View style={styles.colorbox}>
-                        <Text style={styles.colortext}>Choose Background Color</Text>
-                        <View style={styles.colorpalette}>
-                            <View style={styles.color1}></View>
-                            <View style={styles.color2}></View>
-                            <View style={styles.color3}></View>
-                            <View style={styles.color4}></View>
-                        </View>
+                    <View style={styles.colorBox}>
+                        <Text style={styles.colorText}>Choose Background Color</Text>
+                        <View style={styles.colorPalette}>
+                            <TouchableOpacity
+                            onPress={() =>{ this.changeBgColor(this.colors.black)}}
+                            style={ styles.colorSelection}
+                            >
+                                <View style={styles.color1}>
+                                </View>
+                            </TouchableOpacity>
+                            {/* <Pressable
+
+                            onPress={() =>{ this.changeBgColor(this.colors.black), this.changeColor()}}
+
+                            style={{ borderColor: this.state.borderColor}, styles.colorSelection}
+                            >
+
+                                <View style={styles.color1}>
+                                </View>
+                            </Pressable> */}
+                            <TouchableOpacity
+                            onPress={() =>{ this.changeBgColor(this.colors.independence)}}
+                            style={ styles.colorSelection}
+                            >
+                                <View style={styles.color2}>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                            onPress={() =>{ this.changeBgColor(this.colors.duskGray)}}
+                            style={ styles.colorSelection}
+                            >
+                                <View style={styles.color3}>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                            onPress={() =>{ this.changeBgColor(this.colors.composedGreen)}}
+                            style={ styles.colorSelection}
+                            >
+                                <View style={styles.color4}>
+                                </View>
+                            </TouchableOpacity>
+                            </View>
                     </View>
-                    <Pressable style={styles.button} onPress={() => this.props.navigation.navigate('Chat')}>  
+                    <Pressable style={styles.button}  onPress={() =>
+                        this.props.navigation.navigate("Chat", {
+                            name: this.state.name,
+                            bgColor: this.state.bgcolor,
+                        })}>  
                         <Text style={styles.buttontext}>Start Chatting</Text>
                     </Pressable>
                 </View>
@@ -78,20 +144,21 @@ const styles = StyleSheet.create({
         height: "44%",
         width: "88%"
     },
-    inputbox: {
+    inputBox: {
         flexDirection: 'row',
         width:"88%",
         borderColor: '#757083', 
         borderWidth: 1,
         padding: 10
     },
-    usericon:{
+    userIcon:{
         padding: 10,
         margin: 5,
-        height: 25,
-        width: 25,
+        height: 20,
+        width: 20,
         resizeMode: 'stretch',
         alignItems: 'center',
+        opacity: 0.5
     },
     input: {
         fontSize: 16,
@@ -99,23 +166,31 @@ const styles = StyleSheet.create({
         color: '#757083',
         opacity: 0.5
     },
-    colorbox:{
+    colorBox:{
         flexDirection: 'column',
         padding: 20,
         marginRight: 'auto',
         width: "88%"
     },
-    colortext:{
+    colorText:{
         fontSize: 16,
         fontWeight: "300",
         color: '#757083',
         opacity: 1,
         padding: 5,
     },
-    colorpalette: {
+    colorPalette: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         padding: 5,
+    },
+    colorSelection:{
+
+        alignSelf: 'center',
+        borderRadius: 40,
+        borderWidth: 2,
+        borderColor: 'white'
+
     },
     color1:{
         flexDirection: 'row',
@@ -123,6 +198,7 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 20,
+        margin: 2
     },
     color2:{
         flexDirection: 'row',
@@ -130,6 +206,7 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 20,
+        margin: 2
     },
     color3:{
         flexDirection: 'row',
@@ -137,6 +214,7 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 20,
+        margin: 2
     },
     color4:{
         flexDirection: 'row',
@@ -144,6 +222,7 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 20,
+        margin: 2
     },
     button: {
         flexDirection: 'column',
