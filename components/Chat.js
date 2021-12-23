@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Platform, KeyboardAvoidingView } from 'react-native';
-import { GiftedChat } from 'react-native-gifted-chat'
+import { GiftedChat, Bubble } from 'react-native-gifted-chat'
 
 
 export default class Chat extends React.Component {
@@ -17,13 +17,17 @@ export default class Chat extends React.Component {
                 {...props}
                 wrapperStyle={{
                     right: {
-                        backgroundColor: '#000'
+                        backgroundColor: '#000',
+                        opacity: 0.75
                     }
                 }}
             />
         )
     }
+
     componentDidMount() {
+        const name = this.props.route.params.name;
+
         this.setState({
             messages: [
                 {
@@ -38,7 +42,7 @@ export default class Chat extends React.Component {
                 },
                 {
                     _id: 2,
-                    text: 'This is a system message',
+                    text: name + ' has joined the chat.',
                     createdAt: new Date(),
                     system: true,
                 },
@@ -61,14 +65,18 @@ export default class Chat extends React.Component {
             alignItems:'center', 
             justifyContent:'center', 
             backgroundColor: bgcolor ? bgcolor : "white",}}>
-                <GiftedChat
-                renderBubble={this.renderBubble.bind(this)}
-                messages={this.state.messages}
-                onSend={messages => this.onSend(messages)}
-                user={{
-                    _id: 1,
-                }}
-                />
+                <View 
+                style={styles.giftedChat}>
+                    <GiftedChat
+                    renderBubble={this.renderBubble.bind(this)}
+                    messages={this.state.messages}
+                    onSend={messages => this.onSend(messages)}
+                    user={{
+                        _id: 1,
+                    }}
+                    />                
+                </View>
+
                 { Platform.OS === 'android' ? <KeyboardAvoidingView behavior="height" /> : null}
             {/* <Text style={styles.title}>You'll see your chat here</Text> */}
         </View>
@@ -79,12 +87,14 @@ export default class Chat extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        alignItems:'center', 
+        justifyContent:'center'
     },
-    title: {
-        fontSize: 45,
-        fontWeight: "bold",
-        color: 'white',
-        textAlign: "center",
-        padding: 20
+    giftedChat: {
+        flex: 1,
+        width: "88%",
+        paddingBottom: 10,
+        justifyContent: "center",
+        borderRadius: 5,
     },
 })
