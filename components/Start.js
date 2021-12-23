@@ -7,7 +7,9 @@ import {
     View, 
     Text, 
     TextInput, 
-    Pressable
+    Pressable,
+    Platform, 
+    KeyboardAvoidingView 
 } from 'react-native';
 
 const image = require('../assets/images/bg.png');
