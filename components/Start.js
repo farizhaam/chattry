@@ -20,16 +20,14 @@ export default class Start extends React.Component {
         super(props);
         this.state = { 
             name: '',
-            bgcolor: '',
+            bgcolor: ''
         };
     }
 
 
     changeBgColor = (newColor) => {
-        this.setState({ bgColor: newColor });
+        this.setState({ bgcolor: newColor });
     };
-
-
 
     //background color choices
     colors = {
@@ -42,23 +40,32 @@ export default class Start extends React.Component {
     render() {
         return (
         <View style={styles.container}>
+
             <ImageBackground source={image} resizeMode='cover' style={styles.image}>
+
                 <View style={styles.titlebox}>
                     <Text style={styles.title}>Chattry</Text>                
                 </View>
+
                 <View style={styles.box}>
                     <View style={styles.inputBox}>
+                        
                         <Image source={icon} style={styles.userIcon}/>
+
                         <TextInput
                             style={styles.input}
-                            onChangeText={(text) => this.setState({text})}
+                            onChangeText={(text) => this.setState({name: text})}
                             value={this.state.name}
                             placeholder='Your Name'
                         ></TextInput>
+
                     </View>
                     <View style={styles.colorBox}>
+
                         <Text style={styles.colorText}>Choose Background Color</Text>
+                        
                         <View style={styles.colorPalette}>
+
                             <TouchableOpacity
                             onPress={() =>{ this.changeBgColor(this.colors.black)}}
                             style={ styles.colorSelection}
@@ -66,16 +73,7 @@ export default class Start extends React.Component {
                                 <View style={styles.color1}>
                                 </View>
                             </TouchableOpacity>
-                            {/* <Pressable
 
-                            onPress={() =>{ this.changeBgColor(this.colors.black), this.changeColor()}}
-
-                            style={{ borderColor: this.state.borderColor}, styles.colorSelection}
-                            >
-
-                                <View style={styles.color1}>
-                                </View>
-                            </Pressable> */}
                             <TouchableOpacity
                             onPress={() =>{ this.changeBgColor(this.colors.independence)}}
                             style={ styles.colorSelection}
@@ -83,6 +81,7 @@ export default class Start extends React.Component {
                                 <View style={styles.color2}>
                                 </View>
                             </TouchableOpacity>
+
                             <TouchableOpacity
                             onPress={() =>{ this.changeBgColor(this.colors.duskGray)}}
                             style={ styles.colorSelection}
@@ -90,6 +89,7 @@ export default class Start extends React.Component {
                                 <View style={styles.color3}>
                                 </View>
                             </TouchableOpacity>
+
                             <TouchableOpacity
                             onPress={() =>{ this.changeBgColor(this.colors.composedGreen)}}
                             style={ styles.colorSelection}
@@ -97,15 +97,22 @@ export default class Start extends React.Component {
                                 <View style={styles.color4}>
                                 </View>
                             </TouchableOpacity>
+
+
                             </View>
+
                     </View>
-                    <Pressable style={styles.button}  onPress={() =>
+
+                    <Pressable 
+                    style={styles.button}  
+                    onPress={() =>
                         this.props.navigation.navigate("Chat", {
                             name: this.state.name,
-                            bgColor: this.state.bgcolor,
-                        })}>  
+                            bgcolor: this.state.bgcolor,
+                        })}
+                    >  
                         <Text style={styles.buttontext}>Start Chatting</Text>
-                    </Pressable>
+                    </Pressable> 
                 </View>
             </ImageBackground>
 
@@ -126,7 +133,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     titlebox:{
-        height: "44%",
+        height: '44%',
         width: "88%"
     },
     title: {
@@ -137,10 +144,19 @@ const styles = StyleSheet.create({
         padding: 20
     },
     box: {
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: "white", 
+        marginBottom: 30,
+        backgroundColor: "white",
+        flexGrow: 1,
+        flexShrink: 0,
+        flexDirection: "column",
+        justifyContent: "space-evenly",
+        alignItems: "center",
+        paddingTop: 15,
+        paddingBottom: 15,
+        borderRadius: 10,
+        height: 260,
+        minHeight: 260,
+        maxHeight: 300,
         height: "44%",
         width: "88%"
     },
