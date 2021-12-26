@@ -80,9 +80,9 @@ export default class Chat extends React.Component {
                 text: data.text,
                 createdAt: data.createdAt.toDate(),
                 user: {
-                _id: data.user._id,
-                name: data.user.name,
-                avatar: data.user.avatar
+                    _id: data.user._id,
+                    name: data.user.name,
+                    avatar: data.user.avatar
                 }
             });
         });
@@ -102,10 +102,10 @@ export default class Chat extends React.Component {
         const message = this.state.messages[0];
         // add a new messages to the collection
         this.referenceChatMessages.add({
-        _id: message._id,
-        text: message.text || "",
-        createdAt: message.createdAt,
-        user: this.state.user
+            _id: message._id,
+            text: message.text || "",
+            createdAt: message.createdAt,
+            user: this.state.user
         });
     }    
     
