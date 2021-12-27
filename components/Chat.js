@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, Platform, KeyboardAvoidingView, LogBox } from 'react-native';
-import { GiftedChat, Bubble } from 'react-native-gifted-chat';
-import firebase from "firebase";
+import { GiftedChat, Bubble, Day } from 'react-native-gifted-chat';
+import * as firebase from 'firebase';
 import "firebase/firestore";
 
-//chattry firebase credentials
+//chattry firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyCQm3NiiTSHFSv1hCH0uIrty6eADzpc3FE",
     authDomain: "chattry-e3b2d.firebaseapp.com",
@@ -15,59 +15,69 @@ const firebaseConfig = {
     measurementId: "G-XHEPD4MNS1"
 };
 
+
 export default class Chat extends React.Component {
-    constructor() {
+    constructor(props){
         super();
         this.state = {
+            messages: [],
             uid: 0,
-                user: {
+            user: {
                 _id: "",
                 name: "",
                 avatar: "",
-            }
-        }
+            },
+        };
+    
         //initializing firebase
         if (!firebase.apps.length){
             firebase.initializeApp(firebaseConfig);
         }
-        // reference to the Firestore message collection
+        // reference to the Firestore messages collection
         this.referenceChatMessages = firebase.firestore().collection("messages");
     
-        // To remove warning message in the console 
+         // To remove warning message in the console 
         LogBox.ignoreLogs([
             'Setting a timer',
             'Warning: ...',
             'undefined',
             'Animated.event now requires a second argument for options',
         ]);
+    
     }
-
-
-
+    
+    
     componentDidMount() {
-        const name = this.props.route.params.name;
-
-        //user authentication
-        this.authUnsubscribe = firebase.auth().onAuthStateChanged((user) => {
+        // Set the page title once Chat is loaded
+        let { name } = this.props.route.params
+        // Adds the name to top of screen
+        this.props.navigation.setOptions({ title: name })
+    
+        // user can sign in anonymously
+        this.authUnsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
             if (!user) {
-                firebase.auth().signInAnonymously();//user can sign in as anonymous
+                await firebase.auth().signInAnonymously();
             }
-
+        
+            //update user state with currently active user data
             this.setState({
                 uid: user.uid,
+                messages: [],
                 user: {
                     _id: user.uid,
                     name: name,
-                    avatar: 'https://placeimg.com/140/140/any'
+                    avatar: "https://placeimg.com/140/140/any",
                 },
             });
-
+            // listens for updates in the collection
             this.unsubscribe = this.referenceChatMessages
                 .orderBy("createdAt", "desc")
-                .onSnapshot(this.onCollectionUpdate);
+                .onSnapshot(this.onCollectionUpdate)
         });
+    
     }
-
+    
+    
     // when updated set the messages state with the current data 
     onCollectionUpdate = (querySnapshot) => { 
         const messages = [];
@@ -79,11 +89,7 @@ export default class Chat extends React.Component {
                 _id: data._id,
                 text: data.text,
                 createdAt: data.createdAt.toDate(),
-                user: {
-                    _id: data.user._id,
-                    name: data.user.name,
-                    avatar: data.user.avatar
-                }
+                user: data.user
             });
         });
         this.setState({
@@ -91,12 +97,12 @@ export default class Chat extends React.Component {
         });
     };
 
+    //unsubscribe from collection updates
     componentWillUnmount() {
-        //unsubscribe from collection updates
         this.authUnsubscribe();
         this.unsubscribe();
     }
-
+    
     // Add messages to database
     addMessages() { 
         const message = this.state.messages[0];
@@ -107,14 +113,18 @@ export default class Chat extends React.Component {
             createdAt: message.createdAt,
             user: this.state.user
         });
-    }    
+    }
     
+    
+    // calback function for when user sends a message
     onSend(messages = []) {
         this.setState(previousState => ({
             messages: GiftedChat.append(previousState.messages, messages),
-        }))
+        }), () => {
+            this.addMessages();
+        })
     }
-
+    
     renderBubble(props) {
         return (
             <Bubble
@@ -123,36 +133,42 @@ export default class Chat extends React.Component {
                     right: {
                         backgroundColor: '#000',
                         opacity: 0.75
-                    }
+                    },
                 }}
             />
         )
     }
 
+    //change color for day in system message
+    renderDay(props) {
+        return <Day {...props} textStyle={{ color: "#fff" }} />;
+    }
+
     render() {
-        const { bgcolor } = this.props.route.params;
+        // Set the background color selected from start screen
+        const { bgColor } = this.props.route.params;
         return (
-        
-        <View style={{
-            flex: 1,
-            alignItems:'center', 
-            justifyContent:'center', 
-            backgroundColor: bgcolor ? bgcolor : "white",}}>
-                <View 
-                style={styles.giftedChat}>
-                    <GiftedChat
-                    renderBubble={this.renderBubble.bind(this)}
+            <View style={{
+                flex: 1,
+                alignItems:'center', 
+                justifyContent:'center', 
+                backgroundColor: bgColor ? bgColor : "#fff",}}>
+                <View style={styles.giftedChat}>
+                <GiftedChat
+                    renderDay={this.renderDay}
                     messages={this.state.messages}
                     onSend={messages => this.onSend(messages)}
                     user={{
-                        _id: 1,
+                        _id: this.state.user._id,
+                        name: this.state.name,
+                        avatar: this.state.user.avatar
                     }}
-                    />                
+                    />
+                    { Platform.OS === 'android' ? (
+                        <KeyboardAvoidingView behavior="height" />
+                    ) : null}
                 </View>
-
-                { Platform.OS === 'android' ? <KeyboardAvoidingView behavior="height" /> : null}
-            {/* <Text style={styles.title}>You'll see your chat here</Text> */}
-        </View>
+            </View>
         )
     }
 }
