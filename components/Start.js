@@ -22,13 +22,13 @@ export default class Start extends React.Component {
         super(props);
         this.state = { 
             name: '',
-            bgcolor: ''
+            bgColor: ''
         };
     }
 
 
-    changeBgColor = (newColor) => {
-        this.setState({ bgcolor: newColor });
+    changebgColor = (newColor) => {
+        this.setState({ bgColor: newColor });
     };
 
     //background color choices
@@ -82,7 +82,7 @@ export default class Start extends React.Component {
                             accessibilityLabel="Rich Black as background"
                             accessibilityHint="Settting color Rich Black as chat background"
                             accessibilityRole="combobox"
-                            onPress={() =>{ this.changeBgColor(this.colors.black)}}
+                            onPress={() =>{ this.changebgColor(this.colors.black)}}
                             style={ styles.colorSelection}
                             >
                                 <View style={styles.color1}>
@@ -94,7 +94,7 @@ export default class Start extends React.Component {
                             accessibilityLabel="Independence Purple as background"
                             accessibilityHint="Settting color Independence Purple as chat background"
                             accessibilityRole="combobox"
-                            onPress={() =>{ this.changeBgColor(this.colors.independence)}}
+                            onPress={() =>{ this.changebgColor(this.colors.independence)}}
                             style={ styles.colorSelection}
                             >
                                 <View style={styles.color2}>
@@ -106,7 +106,7 @@ export default class Start extends React.Component {
                             accessibilityLabel="Dusk Gray as background"
                             accessibilityHint="Settting color Dusk Gray as chat background"
                             accessibilityRole="combobox"
-                            onPress={() =>{ this.changeBgColor(this.colors.duskGray)}}
+                            onPress={() =>{ this.changebgColor(this.colors.duskGray)}}
                             style={ styles.colorSelection}
                             >
                                 <View style={styles.color3}>
@@ -118,7 +118,7 @@ export default class Start extends React.Component {
                             accessibilityLabel="Composed Green as background"
                             accessibilityHint="Settting color Composed Green as chat background"
                             accessibilityRole="combobox"                            
-                            onPress={() =>{ this.changeBgColor(this.colors.composedGreen)}}
+                            onPress={() =>{ this.changebgColor(this.colors.composedGreen)}}
                             style={ styles.colorSelection}
                             >
                                 <View style={styles.color4}>
@@ -137,7 +137,7 @@ export default class Start extends React.Component {
                     onPress={() =>
                         this.props.navigation.navigate("Chat", {
                             name: this.state.name,
-                            bgcolor: this.state.bgcolor,
+                            bgColor: this.state.bgColor,
                         })}
                     >  
                         <Text style={styles.buttontext}>Start Chatting</Text>
