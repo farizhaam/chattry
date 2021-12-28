@@ -47,7 +47,20 @@ export default class Chat extends React.Component {
     
     }
     
-    
+    //retrieve chat from asyncStorage
+    async getMessages(){
+        let messages = '';
+        try {
+            //wait until asyncStorage promise settles
+            messages = await AsyncStorage.getItem('messages') || [];//set empty if there is no storage item
+            this.setState({
+                messages: JSON.parse(messages)//convert the saved string back into an object
+            });
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
     componentDidMount() {
         // Set the page title once Chat is loaded
         let { name } = this.props.route.params
@@ -76,6 +89,8 @@ export default class Chat extends React.Component {
                 .onSnapshot(this.onCollectionUpdate)
         });
     
+        //retrieve chat from asyncstorage
+        this.getMessages();
     }
     
     
