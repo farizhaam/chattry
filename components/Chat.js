@@ -187,6 +187,17 @@ export default class Chat extends React.Component {
         )
     }
 
+    //render InputToolbar only when online
+    renderInputToolbar(props) {
+        if (this.state.isConnected == false) {
+        } else {
+            return(
+                <InputToolbar
+                {...props}
+                />
+            );
+        }
+    }
     //change color for day in system message
     renderDay(props) {
         return <Day {...props} textStyle={{ color: "#fff" }} />;
