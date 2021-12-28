@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Platform, KeyboardAvoidingView, LogBox } from 'react-native';
-import { GiftedChat, Bubble, Day } from 'react-native-gifted-chat';
+import { GiftedChat, Bubble, Day, InputToolbar } from 'react-native-gifted-chat';
 import AsyncStorage from '@react-native-community/async-storage';
 import NetInfo from '@react-native-community/netinfo';
 
@@ -93,6 +93,15 @@ export default class Chat extends React.Component {
     
         //retrieve chat from asyncstorage
         this.getMessages();
+
+        //To find out user's connection status
+        NetInfo.fetch().then(connection => {
+            if (connection.isConnected) {
+                console.log('online');
+            } else {
+                console.log('offline');
+            }
+        });
     }
     
     
