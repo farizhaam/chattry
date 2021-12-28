@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Platform, KeyboardAvoidingView, LogBox } from 'react-native';
 import { GiftedChat, Bubble, Day, InputToolbar } from 'react-native-gifted-chat';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
 
 import * as firebase from 'firebase';
@@ -69,39 +69,49 @@ export default class Chat extends React.Component {
         // Adds the name to top of screen
         this.props.navigation.setOptions({ title: name })
     
-        // user can sign in anonymously
-        this.authUnsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
-            if (!user) {
-                await firebase.auth().signInAnonymously();
-            }
-        
-            //update user state with currently active user data
-            this.setState({
-                uid: user.uid,
-                messages: [],
-                user: {
-                    _id: user.uid,
-                    name: name,
-                    avatar: "https://placeimg.com/140/140/any",
-                },
-            });
+        //To find out user's connection status
+        NetInfo.fetch().then(connection => {
+            //actions when user is online
+            if (connection.isConnected) {
+                this.setState({ isConnected: true });
+                console.log('online');
+
+            // user can sign in anonymously
+            this.authUnsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
+                if (!user) {
+                    await firebase.auth().signInAnonymously();
+                }
+
+                //update user state with currently active user data
+                this.setState({
+                    uid: user.uid,
+                    messages: [],
+                    user: {
+                        _id: user.uid,
+                        name: name,
+                        avatar: "https://placeimg.com/140/140/any",
+                    },
+                });
             // listens for updates in the collection
             this.unsubscribe = this.referenceChatMessages
                 .orderBy("createdAt", "desc")
                 .onSnapshot(this.onCollectionUpdate)
-        });
-    
-        //retrieve chat from asyncstorage
-        this.getMessages();
+            });
+            //save messages when online
+            this.saveMessages();
+        } else {
+            this.setState({ isConnected: false });
+            console.log('offline');
 
-        //To find out user's connection status
-        NetInfo.fetch().then(connection => {
-            if (connection.isConnected) {
-                console.log('online');
-            } else {
-                console.log('offline');
-            }
-        });
+            //retrieve chat from asyncstorage
+            this.getMessages();
+        }   
+    });
+
+    
+
+
+
     }
     
     
@@ -218,6 +228,7 @@ export default class Chat extends React.Component {
                     messages={this.state.messages}
                     onSend={messages => this.onSend(messages)}
                     renderBubble={this.renderBubble}
+                    renderInputToolbar={this.renderInputToolbar}
                     user={{
                         _id: this.state.user._id,
                         name: this.state.name,
