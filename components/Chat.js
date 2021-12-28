@@ -131,6 +131,26 @@ export default class Chat extends React.Component {
         });
     }
     
+    //save newly added messages to state.messgaes
+    async saveMessages() {
+        try {
+            await AsyncStorage.setItem('messages', JSON.stringify(this.state.messages));
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
+    //delete stored messages
+    async deleteMessages() {
+        try {
+            await AsyncStorage.removeItem('messages');
+            this.setState({
+                messages: []
+            })
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
     
     // calback function for when user sends a message
     onSend(messages = []) {
@@ -138,6 +158,7 @@ export default class Chat extends React.Component {
             messages: GiftedChat.append(previousState.messages, messages),
         }), () => {
             this.addMessages();
+            this.saveMessages();
         })
     }
     
