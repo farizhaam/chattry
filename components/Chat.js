@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Platform, KeyboardAvoidingView, LogBox } from 'react-native';
 import { GiftedChat, Bubble, Day } from 'react-native-gifted-chat';
+import AsyncStorage from '@react-native-community/async-storage';
 import * as firebase from 'firebase';
 import "firebase/firestore";
 
@@ -158,6 +159,7 @@ export default class Chat extends React.Component {
                     renderDay={this.renderDay}
                     messages={this.state.messages}
                     onSend={messages => this.onSend(messages)}
+                    renderBubble={this.renderBubble}
                     user={{
                         _id: this.state.user._id,
                         name: this.state.name,
