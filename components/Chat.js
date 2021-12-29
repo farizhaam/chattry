@@ -7,6 +7,9 @@ import NetInfo from '@react-native-community/netinfo';
 
 import CustomActions from './CustomActions';
 
+import * as Permissions from 'expo-permissions';
+import * as ImagePicker from 'expo-image-picker';
+
 import * as firebase from 'firebase';
 import "firebase/firestore";
 
@@ -208,6 +211,11 @@ export default class Chat extends React.Component {
         )
     }
 
+    //change color for day in system message
+    renderDay(props) {
+        return <Day {...props} textStyle={{ color: "#fff" }} />;
+    }
+
     // //render InputToolbar only when online
     // renderInputToolbar(props) {
     //     if (this.state.isConnected == false) {
@@ -219,10 +227,11 @@ export default class Chat extends React.Component {
     //         );
     //     }
     // }
-    //change color for day in system message
-    renderDay(props) {
-        return <Day {...props} textStyle={{ color: "#fff" }} />;
-    }
+
+    //to access CustomActions
+    renderCustomActions = (props) => {
+        return <CustomActions {...props} />;
+    };
 
     render() {
         // Set the background color selected from start screen
@@ -239,7 +248,8 @@ export default class Chat extends React.Component {
                     messages={this.state.messages}
                     onSend={messages => this.onSend(messages)}
                     renderBubble={this.renderBubble}
-                    renderInputToolbar={this.renderInputToolbar}
+                    // renderInputToolbar={this.renderInputToolbar}
+                    renderActions={this.renderCustomActions}
                     user={{
                         _id: this.state.user._id,
                         name: this.state.name,
