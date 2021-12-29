@@ -1,8 +1,12 @@
+import PropTypes from 'prop-types';
 import React from 'react';
-import { View, StyleSheet, Platform, KeyboardAvoidingView, LogBox } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
+
+import * as Location from 'expo-location';
+import MapView from 'react-native-maps';
 
 import * as firebase from 'firebase';
 import "firebase/firestore";
@@ -161,3 +165,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
 });
+
+//setting CustomActions props types to function
+CustomActions.contextTypes = {
+    actionSheet: PropTypes.func,
+};
