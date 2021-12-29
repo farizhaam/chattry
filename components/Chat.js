@@ -1,8 +1,11 @@
 import React from 'react';
 import { View, StyleSheet, Platform, KeyboardAvoidingView, LogBox } from 'react-native';
 import { GiftedChat, Bubble, Day, InputToolbar } from 'react-native-gifted-chat';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
+
+import CustomActions from './CustomActions';
 
 import * as firebase from 'firebase';
 import "firebase/firestore";
@@ -31,6 +34,7 @@ export default class Chat extends React.Component {
                 avatar: "",
             },
             isConnected: false,
+            image: null,
         };
     
         //initializing firebase
@@ -204,17 +208,17 @@ export default class Chat extends React.Component {
         )
     }
 
-    //render InputToolbar only when online
-    renderInputToolbar(props) {
-        if (this.state.isConnected == false) {
-        } else {
-            return(
-                <InputToolbar
-                {...props}
-                />
-            );
-        }
-    }
+    // //render InputToolbar only when online
+    // renderInputToolbar(props) {
+    //     if (this.state.isConnected == false) {
+    //     } else {
+    //         return(
+    //             <InputToolbar
+    //             {...props}
+    //             />
+    //         );
+    //     }
+    // }
     //change color for day in system message
     renderDay(props) {
         return <Day {...props} textStyle={{ color: "#fff" }} />;
