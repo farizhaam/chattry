@@ -100,38 +100,42 @@ export default class CustomActions extends React.Component {
         return await snapshot.ref.getDownloadURL();
     };
 
+    //function that handles communication features
+    onActionPress = () => {
+        const options = [
+            "Choose From Library",
+            "Take Picture",
+            "Send Location",
+            "Cancel",
+        ];
+        const cancelButtonIndex = options.length - 1;
+        this.context.actionSheet().showActionSheetWithOptions(
+            {
+                options,
+                cancelButtonIndex,
+            },
+            async (buttonIndex) => {
+                switch (buttonIndex) {
+                case 0:
+                    console.log("user wants to pick an image");
+                    return this.imagePicker();
+                case 1:
+                    console.log("user wants to take a photo");
+                    return this.takePhoto();
+                case 2:
+                    console.log("user wants to get their location");
+                    return this.getLocation();
+                }
+            }
+        );
+    };
     render() {
         return (
-            <View style={{ flex: 1, justifyContent: 'center' }}>
-                <Button
-                title="Pick an image from the library"
-                onPress={this.pickImage}
-                />
-        
-                <Button
-                title="Take a photo"
-                onPress={this.takePhoto}
-                />
-        
-                {this.state.image &&
-                <Image source={{ uri: this.state.image.uri }} style={{ width: 200, height: 200 }} />}
-        
-                <Button
-                title="Get my location"
-                onPress={this.getLocation}
-                />
-        
-                {this.state.location &&
-                <MapView
-                    style={{ width: 300, height: 200 }}
-                    region={{
-                    latitude: this.state.location.coords.latitude,
-                    longitude: this.state.location.coords.longitude,
-                    latitudeDelta: 0.0922,
-                    longitudeDelta: 0.0421,
-                    }}
-                />}
-            </View>
+            <TouchableOpacity style={[styles.container]} onPress={this.onActionPress}>
+                <View style={[styles.wrapper, this.props.wrapperStyle]}>
+                    <Text style={[styles.iconText, this.props.iconTextStyle]}>+</Text>
+                </View>
+            </TouchableOpacity>
         );
     }
 }
