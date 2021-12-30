@@ -37,6 +37,7 @@ export default class Chat extends React.Component {
             },
             isConnected: false,
             image: null,
+            location: null,
         };
     
         //initializing firebase
@@ -57,19 +58,6 @@ export default class Chat extends React.Component {
     
     }
     
-    //retrieve chat from asyncStorage
-    async getMessages(){
-        let messages = '';
-        try {
-            //wait until asyncStorage promise settles
-            messages = await AsyncStorage.getItem('messages') || [];//set empty if there is no storage item
-            this.setState({
-                messages: JSON.parse(messages)//convert the saved string back into an object
-            });
-        } catch (error) {
-            console.log(error.message);
-        }
-    }
 
     componentDidMount() {
         // Set the page title once Chat is loaded
@@ -139,7 +127,9 @@ export default class Chat extends React.Component {
                     _id: data.user._id,
                     name: data.user.name,
                     avatar: data.user.avatar
-                }
+                },
+                image: data.image || null,
+                location: data.location || null,
             });
         });
         this.setState({
@@ -161,10 +151,26 @@ export default class Chat extends React.Component {
             _id: message._id,
             text: message.text || "",
             createdAt: message.createdAt,
-            user: this.state.user
+            user: this.state.user,
+            image: message.image || "",
+            location: message.location || null,
         });
     }
-    
+
+    //retrieve chat from asyncStorage
+    async getMessages(){
+        let messages = '';
+        try {
+            //wait until asyncStorage promise settles
+            messages = await AsyncStorage.getItem('messages') || [];//set empty if there is no storage item
+            this.setState({
+                messages: JSON.parse(messages)//convert the saved string back into an object
+            });
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
     //save newly added messages to state.messgaes
     async saveMessages() {
         try {
@@ -271,6 +277,7 @@ export default class Chat extends React.Component {
                     renderBubble={this.renderBubble}
                     // renderInputToolbar={this.renderInputToolbar}
                     renderActions={this.renderCustomActions}
+                    renderCustomView={this.renderCustomView}
                     user={{
                         _id: this.state.user._id,
                         name: this.state.name,
