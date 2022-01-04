@@ -221,17 +221,17 @@ export default class Chat extends React.Component {
         return <Day {...props} textStyle={{ color: "#fff" }} />;
     }
 
-    // //render InputToolbar only when online
-    // renderInputToolbar(props) {
-    //     if (this.state.isConnected == false) {
-    //     } else {
-    //         return(
-    //             <InputToolbar
-    //             {...props}
-    //             />
-    //         );
-    //     }
-    // }
+    //render InputToolbar only when online
+    renderInputToolbar(props) {
+        if (this.state.isConnected == false) {
+        } else {
+            return(
+                <InputToolbar
+                    {...props}
+                />
+            );
+        }
+    }
 
     //to access CustomActions
     renderCustomActions = (props) => {
@@ -274,8 +274,8 @@ export default class Chat extends React.Component {
                     renderDay={this.renderDay}
                     messages={this.state.messages}
                     onSend={messages => this.onSend(messages)}
-                    renderBubble={this.renderBubble}
-                    // renderInputToolbar={this.renderInputToolbar}
+                    renderBubble={this.renderBubble.bind(this)}
+                    renderInputToolbar={this.renderInputToolbar.bind(this)}
                     renderActions={this.renderCustomActions}
                     renderCustomView={this.renderCustomView}
                     user={{
